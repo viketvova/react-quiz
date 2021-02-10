@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import classes from './Quiz.module.css'
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz'
+import FinishedQuiz from '../../components/FinishedQuiz/FinishedQuiz'
 
 class Quiz extends Component {
 
   state = {
+    results: {},
+    isFinished: false,
     activeQuestion: 0,
     answerState: null, // {[id]: 'success' 'error'}
     quiz: [
@@ -37,32 +40,33 @@ class Quiz extends Component {
     return this.state.activeQuestion + 1 === this.state.quiz.length
   }
 
-  palindrome(str) {
-    /* remove special characters, spaces and make lowercase*/
-    let removeChar = str.replace(/[^A-Z0-9]/ig, "").toLowerCase();
-
-    /* reverse removeChar for comparison*/
-    let checkPalindrome = removeChar.split('').reverse().join('');
-
-    /* Check to see if str is a Palindrome*/
-    return (removeChar === checkPalindrome);
-
-
-  }
 
   onAnswerClickHandler = (answerId) => {
 
+    if (this.state.answerState) {
+      let key = Object.keys(this.state.answerState)[0]
+      if (this.state.answerState[key] === 'success') {
+        return
+      }
+    }
+
     const question = this.state.quiz[this.state.activeQuestion]
+    const results = this.state.results
 
     if (question.rightAnswerId === answerId) {
-
+      if (!results[answerId]) {
+        results[answerId] = 'success'
+      }
       this.setState({
-        answerState: { [answerId]: 'success' }
+        answerState: { [answerId]: 'success' },
+        results: results
       })
 
       const timeout = window.setTimeout(() => {
         if (this.isQuizFinished()) {
-          console.log('Finished')
+          this.setState({
+            isFinished: true
+          })
         } else {
           this.setState({
             activeQuestion: this.state.activeQuestion + 1,
@@ -74,12 +78,12 @@ class Quiz extends Component {
       }, 1000)
 
     } else {
+      results[answerId] = 'error'
       this.setState({
-        answerState: { [answerId]: 'error' }
+        answerState: { [answerId]: 'error' },
+        results: results
       })
-
     }
-
   }
 
   render() {
@@ -87,15 +91,22 @@ class Quiz extends Component {
       <div className={classes.Quiz}>
         <div className={classes.QuizWrapper}>
           <h1>Выберите ответы на вопросы</h1>
-          <h2>{this.palindrome('А роза упала на лапу Азора')}</h2>
-          <ActiveQuiz
-            onAnswerClick={this.onAnswerClickHandler}
-            answers={this.state.quiz[this.state.activeQuestion].answers}
-            question={this.state.quiz[this.state.activeQuestion].question}
-            quizLength={this.state.quiz.length}
-            answerNumber={this.state.activeQuestion + 1}
-            state={this.state.answerState}
-          />
+          {
+            this.state.isFinished
+              ? <FinishedQuiz
+                results={this.state.results}
+                quiz={this.state.quiz}
+              />
+              : <ActiveQuiz
+                onAnswerClick={this.onAnswerClickHandler}
+                answers={this.state.quiz[this.state.activeQuestion].answers}
+                question={this.state.quiz[this.state.activeQuestion].question}
+                quizLength={this.state.quiz.length}
+                answerNumber={this.state.activeQuestion + 1}
+                state={this.state.answerState}
+              />
+          }
+
         </div>
       </div>
     )
