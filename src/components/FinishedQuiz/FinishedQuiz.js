@@ -2,47 +2,42 @@ import React from 'react'
 import classes from './FinishedQuiz.module.css'
 
 const FinishedQuiz = props => {
-
     const successCount = Object.keys(props.results).reduce((total, elem) => {
         if (props.results[elem] === 'success') {
             total++
         }
+
         return total
     }, 0)
-    const value = Object.values(props.results)
-    console.log(value)
+
+
     return (
         <div className={classes.FinishedQuiz}>
             <ul>
-                {
-                    props.quiz.map((elem, index) => {
-                        // const cls = [
-                        //     'fa',
-                        //     props.results[elem.id] === 'error' ? 'fa-times' : 'fa-check',
-                        //     classes[props.results[elem.id]]
-                        // ]
-                        // if (props.results[elem.id] === 'success') {
-                        //     iClass = ('fa fa-times ' + classes.error)
-                        // } else {
-                        //     iClass = ('fa fa-check ' + classes.success)
-                        // }
-                        return (
-                            <li key={index}>
-                                <strong>{elem.id}. </strong>
-                                {elem.question}
+                {props.quiz.map((quizItem, index) => {
+                    const cls = [
+                        'fa',
+                        props.results[quizItem.id] === 'error' ? 'fa-times' : 'fa-check',
+                        classes[props.results[quizItem.id]]
+                    ]
 
-                                <i className={value[elem.id] === 'success' ? ('fa fa-times ' + classes.error) : ('fa fa-check ' + classes.success)}></i>
-                            </li>
+                    return (
+                        <li
+                            key={index}
+                        >
+                            <strong>{index + 1}</strong>.&nbsp;
+                            {quizItem.question}
+                            <i className={cls.join(' ')} />
+                        </li>
+                    )
 
-                        )
-                    })}
-
+                })}
             </ul>
 
             <p>Правильно {successCount} из {props.quiz.length}</p>
 
             <div>
-                <button>Повторить</button>
+                <button onClick={props.onRetry}>Повторить</button>
             </div>
         </div>
     )
