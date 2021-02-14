@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import classes from './Drawer.module.css'
 import Backblack from '../../UserInterface/Backblack/Backblack'
+import { NavLink } from 'react-router-dom'
 
 const links = [
-    1, 2, 3
+    'Home', 'Quiz', 'About'
 ]
 
 class Drawer extends Component {
@@ -11,7 +12,7 @@ class Drawer extends Component {
     renderLinks = () => {
         return links.map((elem, index) => {
             return (<li key={index}>
-                <a>Links {elem}</a>
+                <NavLink to={`/${elem.toLowerCase()}`}>{elem}</NavLink>
             </li>)
         })
     }
