@@ -4,7 +4,9 @@ import Backblack from '../../UserInterface/Backblack/Backblack'
 import { NavLink } from 'react-router-dom'
 
 const links = [
-    'Home', 'Quiz', 'About'
+    { to: '/', name: 'Список', exact: true },
+    { to: '/auth', name: 'Авторизация', exact: false },
+    { to: '/quiz-creator', name: 'Создать тест', exact: false },
 ]
 
 class Drawer extends Component {
@@ -12,7 +14,13 @@ class Drawer extends Component {
     renderLinks = () => {
         return links.map((elem, index) => {
             return (<li key={index}>
-                <NavLink to={`/${elem.toLowerCase()}`}>{elem}</NavLink>
+                <NavLink
+                    to={elem.to}
+                    exact={elem.exact}
+                    activeClassName={classes.active}
+                    onClick={this.props.onClose}
+                >{elem.name}
+                </NavLink>
             </li>)
         })
     }
@@ -21,7 +29,7 @@ class Drawer extends Component {
         const cls = [classes.Drawer]
 
         if (!this.props.isOpen) {
-            console.log(cls)
+            // console.log(cls)
             cls.push(classes.close)
         }
 
