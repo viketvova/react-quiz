@@ -24,7 +24,6 @@ function LoginForm(props) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-
     return (
         <form className='LoginForm' onSubmit={submitHandler}>
             <div className="form-inner">

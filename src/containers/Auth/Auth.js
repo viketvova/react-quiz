@@ -13,6 +13,7 @@ function Auth() {
     const [user, setUser] = useState({ name: '', email: '', password: '' })
     const [error, setError] = useState('')
 
+
     const login = (details) => {
 
         if (details.email === adminUser.email && details.password === adminUser.password) {
@@ -30,6 +31,7 @@ function Auth() {
     const logout = () => {
         setUser({ name: '', email: '', password: '' });
     }
+
 
 
     return (
