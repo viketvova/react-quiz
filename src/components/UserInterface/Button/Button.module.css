@@ -36,3 +36,14 @@
     background: royalblue;
     color: white;
 }
+
+.hide {
+    
+    background:rgb(10, 209, 10, 1);
+    position:absolute; /* добавили */
+	bottom:0; /* добавили */
+	border: 2px solid #eee;
+    text-align: center;
+
+}
+
